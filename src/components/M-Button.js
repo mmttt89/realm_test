@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginLeft: 35,
         marginRight: 35,
+        borderRadius:8
     },
     text: {
         color: '#ffffff',

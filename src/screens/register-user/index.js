@@ -33,7 +33,8 @@ export default class RegisterUserScreen extends React.Component {
                             user_name: this.state.user_name,
                             user_contact: this.state.user_contact,
                             user_address: this.state.user_address,
-                        });
+                        })
+
                         Alert.alert(
                             'Success',
                             'You are registered successfully',
