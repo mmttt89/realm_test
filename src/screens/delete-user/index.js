@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, FlatList, Text } from 'react-native';
 import MTextInput from '@Components/M-TextInput';
 import MButton from '@Components/M-Button';
 import Realm from 'realm';
@@ -8,9 +8,14 @@ let realm;
 export default class DeleteUserScreen extends React.Component {
     constructor(props) {
         super(props);
-        realm = new Realm({ path: 'UserDatabase.realm' });
         this.state = {
             input_user_id: '',
+            FlatListItems: []
+        };
+        realm = new Realm({ path: 'UserDatabase.realm' });
+        var user_details = realm.objects('user_details');
+        this.state = {
+            FlatListItems: user_details,
         };
     }
     deleteUser = () => {
@@ -36,7 +41,7 @@ export default class DeleteUserScreen extends React.Component {
                     [
                         {
                             text: 'Ok',
-                            onPress: () => this.props.navigation.navigate('Home'),
+                            onPress: () => console.log("deleted"),
                         },
                     ],
                     { cancelable: false }
@@ -58,6 +63,21 @@ export default class DeleteUserScreen extends React.Component {
                     title="Delete User"
                     customClick={this.deleteUser}
                 />
+                <View style={{ flex: 1 }}>
+                    <FlatList
+                        data={this.state.FlatListItems}
+                        ItemSeparatorComponent={this.ListViewItemSeparator}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <View style={{ backgroundColor: 'white', padding: 20 }}>
+                                <Text>Id: {item.user_id}</Text>
+                                <Text>Name: {item.user_name}</Text>
+                                <Text>Contact: {item.user_contact}</Text>
+                                <Text>Address: {item.user_address}</Text>
+                            </View>
+                        )}
+                    />
+                </View>
             </View>
         )
     }
