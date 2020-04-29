@@ -7,9 +7,27 @@ import UpdateUserScreen from "@Screens/update-user";
 import DeleteUserScreen from "@Screens/delete-user";
 import ViewUserScreen from "@Screens/view-user";
 import ViewAllUserScreen from "@Screens/view-all-user";
+import RealmHome from "@Screens/realm-home";
+import DoubleVisits from "@Screens/double-visits";
 
 const TopLevelStack = createStackNavigator(
     {
+        realmHome: {
+            screen: RealmHome,
+            navigationOptions: {
+                title: 'RealmHome',
+                headerStyle: { backgroundColor: '#8f0d43' },
+                headerTintColor: '#ffffff',
+            },
+        },
+        DoubleVisits: {
+            screen: DoubleVisits,
+            navigationOptions: {
+                title: 'DoubleVisits',
+                headerStyle: { backgroundColor: '#8f0d43' },
+                headerTintColor: '#ffffff',
+            },
+        },
         Home: {
             screen: HomeScreen,
             navigationOptions: {
@@ -59,7 +77,7 @@ const TopLevelStack = createStackNavigator(
             },
         },
     }, {
-    initialRouteName: 'Home',    
+    initialRouteName: 'realmHome',
 }
 );
 
