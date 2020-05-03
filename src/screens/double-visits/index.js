@@ -8,8 +8,7 @@ export default class DoubleVisits extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            DVlist: [],
-            realm: null
+            carsList: [],
         }
     }
 
@@ -18,20 +17,12 @@ export default class DoubleVisits extends React.Component {
             .then(
                 realm => {
                     let Cars = realm.objects('Car')
-                    this.setState({ DVlist: Cars, realm })
+                    this.setState({ carsList: Cars })
                 }
             )
             .catch(err => {
                 console.log(err);
             })
-    }
-
-    componentWillUnmount() {
-        // closing realm dataBase
-        const { realm } = this.state;
-        if (realm !== null && !realm.isClosed) {
-            realm.close();
-        }
     }
 
     render() {
@@ -43,7 +34,7 @@ export default class DoubleVisits extends React.Component {
                     flexDirection: 'column',
                 }}>
                 <FlatList
-                    data={this.state.DVlist}
+                    data={this.state.carsList}
                     ItemSeparatorComponent={this.ListViewItemSeparator}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (

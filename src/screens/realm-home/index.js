@@ -1,42 +1,12 @@
 import React from "react";
-import Realm from "realm";
 import { Text, View, FlatList, Button, ActivityIndicator } from "react-native";
-
+import { RealmContext } from "@Context/Realm-Context";
+import Realm from "realm";
 const REALM_PATH = "UserDatabase.realm";
 
-const CarSchema = {
-    name: 'Car',
-    properties: {
-        make: 'string',
-        model: 'string',
-        miles: { type: 'int', default: 0 },
-    }
-};
-const PersonSchema = {
-    name: 'Person',
-    properties: {
-        name: 'string',
-        birthday: { type: 'date', default: new Date() },
-        cars: 'Car[]', // a list of Cars
-        picture: 'string',  // optional property,
-        age: 'int',
-        nickname: 'string',
-        gender: 'string'
-    }
-};
-
-export default class RealmHome extends React.Component {
+class RealmHome extends React.Component {
     constructor(props) {
         super(props);
-        this.realmDB = new Realm({
-            path: REALM_PATH,
-            schema: [PersonSchema, CarSchema],
-            schemaVersion: 3,
-            migration: (oldRealm, newRealm) => {
-                console.log("migration needed")
-            },
-            // deleteRealmIfMigrationNeeded: true
-        });
         this.state = {
             list: [],
             isLoading: false
@@ -44,9 +14,6 @@ export default class RealmHome extends React.Component {
     }
 
     componentDidMount() {
-        const currentVersion = Realm.schemaVersion(REALM_PATH);
-        console.log("currentVersion", currentVersion)
-        // fetch data when app loaded
         Realm.open({ path: REALM_PATH })
             .then(realm => {
                 //get Data         
@@ -57,7 +24,6 @@ export default class RealmHome extends React.Component {
                 console.log(error);
             })
     }
-
 
     _bulkInsertCarData = () => {
         this.setState({ isLoading: true }, () => {
@@ -96,16 +62,12 @@ export default class RealmHome extends React.Component {
             })
     }
 
-    componentWillUnMount() {
-
-    }
-
     render() {
         return (
             <View
                 style={{
                     flex: 1,
-                    backgroundColor: 'white',
+                    backgroundColor: 'teal',
                     flexDirection: 'column',
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -145,6 +107,20 @@ export default class RealmHome extends React.Component {
         )
     }
 }
+
+const RealmHomeWrapper = (props) => {
+    return (
+        <RealmContext.Consumer>{(realmContext) => {
+            return (
+                <RealmHome realmContext={realmContext}{...props} />
+            )
+        }}
+        </RealmContext.Consumer>
+    )
+}
+
+export default RealmHomeWrapper;
+
 const RButton = ({ title, onPress }) =>
     <Button
         style={{ marginVertical: 30 }}
